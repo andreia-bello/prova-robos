@@ -161,6 +161,7 @@ public class Main {
                             robo2 = robo;
                         }
                     }
+                    
 
                     if (robo1 == null || robo2 == null) {
 

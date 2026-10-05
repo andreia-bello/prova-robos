@@ -1,15 +1,15 @@
 
 public class Robo {
 
-    public int codigo;
-    public String nome;
-    public int ataque;
-    public int defesa;
-    public int energia;
-    public int vitorias;
-    public int derrotas;
-    public int pontos;
-    public int combates;
+    private int codigo;
+    private String nome;
+    private int ataque;
+    private int defesa;
+    private int energia;
+    private int vitorias;
+    private int derrotas;
+    private int pontos;
+    private int combates;
 
     public static final int energia_min = 30;
 
@@ -33,7 +33,7 @@ public class Robo {
     }
 
     public String situacao() {
-        if (this.energia >= energia_min) {
+        if (energia >= energia_min) {
            return "Disponível";
         } else {
             return "Em recuperação";
@@ -54,12 +54,63 @@ public class Robo {
             "Situação: " + situacao() );
     }
 
+    public void receberDano(int dano) {
+        energia = energia - dano;
+        if (energia < 0) {
+            energia = 0;
+        }
+    }
+
+    public void recuperarEnergia(int quantidade) {
+        energia = energia + quantidade;
+        if (energia > 100) {
+            energia = 100;
+        }
+    }
+
+    public void gastarPontos(int quantidade) {
+        pontos -= quantidade;
+    }
+
+    public void registrarVitoria() {
+        vitorias++;
+        pontos += 3;
+        combates++;
+    }
+
+    public void registrarDerrota() {
+        derrotas++;
+        combates++;
+    }
+
+    public void registrarEmpate() {
+        pontos++;
+        combates++;
+    }
+
+    public double calculoAproveitamento() {
+        if (combates == 0) {
+            return 0;
+        } else {
+            double aproveitamento = (vitorias / combates) * 100;
+            return aproveitamento;
+        }
+    }
+
     public int getPontos() { 
         return pontos; 
     }
 
     public int getCodigo() { 
         return codigo; 
+    }
+
+    public int getEnergia() { 
+        return energia; 
+    }
+
+    public String getNome() {
+        return nome;
     }
 
 }
