@@ -39,13 +39,28 @@ public class Main {
                 case 1: {
                     System.out.println("Informe o código do robô");
                     int codigo = scanner.nextInt();
+
                     if (codigo <= 0) {
                         System.out.println("O código deve ser um número positivo.");
                         break;
                     }
 
+                    boolean validaCodigo = false;
+
+                    for (Robo robo : robos) {
+                        if (robo.getCodigo() == codigo) {
+                        validaCodigo = true;
+                        break;
+                        }
+                    }
+
+                    if (validaCodigo) {
+                        System.out.println("Código já cadastrado.");
+                        break;
+                    }
+
                     System.out.println("Informe o nome do robô");
-                    String nome = scanner.next();
+                    String nome = scanner.nextLine();
 
                     if (nome == null ) {
                         System.out.println("O nome não pode ser vazio.");
@@ -80,7 +95,7 @@ public class Main {
                     try {
                         System.out.println("Informe o código do robô que deseja buscar:");
                         cdg = scanner.nextInt();
-                    } catch (NumberFormatException e) {
+                    } catch (InputMismatchException e) {
                         System.out.println("Entrada inválida, informe um número.");
                         break; 
                     }
@@ -88,7 +103,7 @@ public class Main {
 
                     for (Robo robo : robos) {
 
-                        if (robo.codigo == cdg) {
+                        if (robo.getCodigo() == cdg) {
                             robo.consultarRobos();
                             encontrou = true;
                             break;
@@ -110,63 +125,77 @@ public class Main {
                 }
 
                 /*
-                solicitar os códigos de dois robôs distintos. Ambos deverão existir e possuir pelo menos 30 de energia
+                Solicitar os códigos de dois robôs distintos. Ambos deverão existir e possuir pelo menos 30 de energia
                 */
-                case 4:{
+                case 4: {
+
                     if (robos.size() < 2) {
-                        System.out.println("Para realizar um combate é preciso ter cadastro mínimo de dois robôs.");
+                        System.out.println("Impossível realizar combate. É necessário ter pelo menos dois robôs cadastrados." );
                         break;
                     }
 
-                    int cod1 = 0;
-                    int cod2 = 0;
+                    int cod1;
+                    int cod2;
 
-                    boolean entradaValida = true;
+                    System.out.println("Código do 1º robô:");
+                    cod1 = scanner.nextInt();
 
-                    try {
-                        System.out.println("Código do 1º robô: ");
-                        cod1 = scanner.nextInt();
-                        System.out.println("Código do 2º robô: ");
-                        cod2 = scanner.nextInt();
-                    } catch (InputMismatchException e) {
-                        System.out.println("Entrada inválida, informe apenas números.");
-                        entradaValida = false;
-                    }
+                    System.out.println("Código do 2º robô:");
+                    cod2 = scanner.nextInt();
 
-                    if (!entradaValida) {
-                        break;
-                    }
-
-                    // Validando os códigos
                     if (cod1 == cod2) {
-                        System.out.println("Os códigos devem ser diferentes.");
+                        System.out.println( "Impossível realizar combate. Os códigos dos robôs devem ser diferentes.");
                         break;
                     }
 
-                    // Identificando os robôs
                     robo1 = null;
                     robo2 = null;
 
                     for (Robo robo : robos) {
-                        if (robo.codigo == cod1) {
+
+                        if (robo.getCodigo() == cod1) {
                             robo1 = robo;
                         }
-                        if (robo.codigo == cod2) {
+
+                        if (robo.getCodigo() == cod2) {
                             robo2 = robo;
                         }
                     }
 
                     if (robo1 == null || robo2 == null) {
-                        System.out.println("Combate não pode ser iniciado: algum dos códigos não existe.");
+
+                        System.out.println( "Combate não pode ser realizado.");
+
+                        if (robo1 == null) { 
+                            System.out.println("O código " + cod1 + " não foi encontrado.");
+                        }
+
+                        if (robo2 == null) { 
+                            System.out.println("O código " + cod2 +" não foi encontrado.");
+                        }
+
+                        // Não deixa vazio caso não encontre os códigos
+                        robo1 = null;
+                        robo2 = null;
+
                         break;
                     }
 
-                    // Validando energia
-                    if (robo1.energia < Robo.energia_min || robo2.energia < Robo.energia_min) {
-                        System.out.println("Os dois robôs precisam ter pelo menos 30 de energia.");
+                    if (robo1.getEnergia() < Robo.energia_min || robo2.getEnergia() < Robo.energia_min) {
+
+                        System.out.println("Os dois robôs precisam possuir pelo menos 30 de energia.");
+
+                        // Atribui nulo porque os robôs não podem iniciar o combate.
+                        robo1 = null;
+                        robo2 = null;
+
                         break;
                     }
-                break;
+
+                    System.out.println("Robôs selecionados com sucesso! Prontos para inciar combate.");
+                    System.out.println(robo1.getNome() + " x " + robo2.getNome());
+
+                    break;
                 }
                 
                 case 5:{
