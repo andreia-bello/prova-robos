@@ -1,6 +1,7 @@
 
 public class Robo {
 
+    // protegendo as regras de alteração de energia e indicadores
     private int codigo;
     private String nome;
     private int ataque;
@@ -11,7 +12,7 @@ public class Robo {
     private int pontos;
     private int combates;
 
-    public static final int energia_min = 30;
+    public static final int ENERGIA_MIN = 30;
 
     /*
     O código deverá ser positivo e exclusivo; o nome não poderá estar vazio; o ataque deverá estar entre 10 e 30; 
@@ -20,10 +21,10 @@ public class Robo {
     
     */
 
-    public Robo(int codigo, String nome, int ataque, int defesa) {
+    public Robo(int codigo, String nome, int ataque, int defesa) throws Exception {
         this.codigo = codigo;
         this.nome = nome;
-        this.ataque = ataque;
+        this.setAtaque(ataque);
         this.defesa = defesa;
         this.energia = 100;
         this.vitorias = 0;
@@ -32,19 +33,39 @@ public class Robo {
         this.combates = 0;
     }
 
+    public void setAtaque(int ataque) throws Exception {
+        if (ataque < 10 || ataque > 30) {
+            throw new Exception("Ataque não pode ser maior que mil");
+        }
+
+        this.ataque = ataque;
+    }
+
+    public int getAtaque() {
+        return this.ataque;
+    }
+
+    public int getDefesa() {
+        return this.defesa;
+    }
+
+    // **disponível** quando possuir pelo menos 30 de energia ou **em recuperação** quando possuir menos de 30.
     public String situacao() {
-        if (energia >= energia_min) {
+        if (this.energia >= ENERGIA_MIN) {
            return "Disponível";
         } else {
             return "Em recuperação";
         }
     }
 
+    public void adicionarCombate() {
+        this.combates++;
+    }
 
     public void consultarRobos() {
         System.out.println(
             "Nome: " + this.nome + " | " + 
-            "Ataque: " + this.ataque + " | " + 
+            "Ataque: " + this.getAtaque() + " | " + 
             "Defesa: " + this.defesa +" | " + 
             "Energia: " + this.energia + " | " + 
             "Vitórias: " + this.vitorias + " | " + 
@@ -92,11 +113,14 @@ public class Robo {
         if (combates == 0) {
             return 0;
         } else {
-            double aproveitamento = (vitorias / combates) * 100;
+            double aproveitamento = ((double) vitorias / combates) * 100;
             return aproveitamento;
         }
     }
 
+    // public 
+
+    // GETS
     public int getPontos() { 
         return pontos; 
     }
