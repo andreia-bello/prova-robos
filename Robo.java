@@ -1,7 +1,5 @@
+public abstract class Robo {
 
-public class Robo {
-
-    // protegendo as regras de alteração de energia e indicadores
     private int codigo;
     private String nome;
     private int ataque;
@@ -14,14 +12,7 @@ public class Robo {
 
     public static final int ENERGIA_MIN = 30;
 
-    /*
-    O código deverá ser positivo e exclusivo; o nome não poderá estar vazio; o ataque deverá estar entre 10 e 30; 
-    e a defesa, entre 0 e 20. Cada robô começará com 100 de energia e os demais indicadores zerados.
-    Realizar um combate: possuir pelo menos 30 de energia
-    
-    */
-
-    public Robo(int codigo, String nome, int ataque, int defesa) throws Exception {
+    protected Robo(int codigo, String nome, int ataque, int defesa) throws Exception {
         this.codigo = codigo;
         this.nome = nome;
         this.setAtaque(ataque);
@@ -35,13 +26,12 @@ public class Robo {
 
     public void setAtaque(int ataque) throws Exception {
         if (ataque < 10 || ataque > 30) {
-            throw new Exception("Ataque não pode ser maior que mil");
+            throw new Exception("O ataque deve estar entre 10 e 30."); // mensagem corrigida
         }
-
         this.ataque = ataque;
     }
 
-    public int getAtaque() {
+	public int getAtaque() {
         return this.ataque;
     }
 
@@ -138,4 +128,3 @@ public class Robo {
     }
 
 }
-

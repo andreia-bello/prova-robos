@@ -23,7 +23,7 @@ public class Main {
             System.out.println(" (1) Cadastrar robô");
             System.out.println(" (2) Buscar robô por código");
             System.out.println(" (3) Listar robôs");
-            System.out.println(" (4) Escolha de Robôs para Combate)");
+            System.out.println(" (4) Escolha de Robôs para Combate");
             System.out.println(" (5) Executar Combate");
             System.out.println(" (6) Recuperar Energia");
             System.out.println(" (7) Sair");
@@ -37,6 +37,15 @@ public class Main {
 
             switch (escolha) {
                 case 1: { // (1) Cadastrar robô
+                    // NOVO: pergunta o tipo
+                    System.out.println("Tipo do robô: (1) Ofensivo  (2) Defensivo  (3) Equilibrado");
+                    int tipo = scanner.nextInt();
+
+                    if (tipo < 1 || tipo > 3) {
+                        System.out.println("Tipo inválido.");
+                        break;
+                    }
+
                     System.out.println("Informe o código do robô");
                     int codigo = scanner.nextInt();
 
@@ -89,8 +98,25 @@ public class Main {
                         break;
                     }
 
+                    // ===== SUBSTITUI o try antigo =====
                     try {
-                        Robo robo = new Robo(codigo, nome, ataque, defesa);
+                        Robo robo = null;
+
+                        switch (tipo) {
+
+                            case 1: 
+                                robo = new RoboOfensivo(codigo, nome, ataque, defesa); 
+                            break;
+
+                            case 2: 
+                                robo = new RoboDefensivo(codigo, nome, ataque, defesa); 
+                            break;
+
+                            case 3: 
+                                robo = new RoboEquilibrado(codigo, nome, ataque, defesa); 
+                            break;
+                        }
+
                         robos.add(robo);
                         System.out.println("Robô cadastrado com sucesso!");
                     } catch (Exception e) {
