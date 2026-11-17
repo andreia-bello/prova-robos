@@ -48,6 +48,8 @@ public abstract class Robo {
         return this.defesa;
     }
 
+    public abstract String getTipo();
+
     // **disponível** quando possuir pelo menos 30 de energia ou **em recuperação** quando possuir menos de 30.
     public String situacao() {
         if (this.energia >= ENERGIA_MIN) {
@@ -71,6 +73,9 @@ public abstract class Robo {
     }
 
     public void receberDano(int dano) {
+        if (dano < 0) {
+            return; 
+        }
         energia = energia - dano;
         if (energia < 0) {
             energia = 0;

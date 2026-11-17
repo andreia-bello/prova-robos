@@ -38,20 +38,28 @@ public class Main {
             switch (escolha) {
                 case 1: { // (1) Cadastrar robô
                     // NOVO: pergunta o tipo
-                    System.out.println("Tipo do robô: (1) Ofensivo  (2) Defensivo  (3) Equilibrado");
-                    int tipo = scanner.nextInt();
+                    int tipo = 0;
+                    try {
+                        System.out.println("Tipo do robô: (1) Ofensivo  (2) Defensivo  (3) Equilibrado");
+                        tipo = scanner.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Entrada inválida, informe um número.");
+                        scanner.nextLine();
+                        break;
+                    }
 
                     if (tipo < 1 || tipo > 3) {
                         System.out.println("Tipo inválido.");
                         break;
                     }
 
-                    System.out.println("Informe o código do robô");
-                    int codigo = scanner.nextInt();
-
-                    // O código deverá ser positivo e exclusivo;
-                    if (codigo <= 0) {
-                        System.out.println("O código deve ser um número positivo.");
+                    int codigo = 0;
+                    try {
+                        System.out.println("Informe o código do robô");
+                        codigo = scanner.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Entrada inválida, informe um número.");
+                        scanner.nextLine();
                         break;
                     }
 
@@ -76,12 +84,20 @@ public class Main {
                     String nome = scanner.nextLine();
 
                     //  o ataque deverá estar entre 10 e 30
-                    System.out.println("Ataque (10 a 30)");
-                    int ataque = scanner.nextInt();
+                    int ataque = 0;
+                    int defesa = 0;
+                    try {
+                        System.out.println("Ataque (10 a 30)");
+                        ataque = scanner.nextInt();
 
-                    //e a defesa, entre 0 e 20
-                    System.out.println("Defesa (0 a 20)");
-                    int defesa = scanner.nextInt();
+                        //e a defesa, entre 0 e 20
+                        System.out.println("Defesa (0 a 20)");
+                        defesa = scanner.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Entrada inválida, informe um número.");
+                        scanner.nextLine();
+                        break;
+                    }
 
                     // ===== SUBSTITUI o try antigo =====
                     try {

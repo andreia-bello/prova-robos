@@ -8,4 +8,9 @@ public class RoboOfensivo extends Robo {
     public int getAtaqueEfetivo() {
         return getAtaque() + 5;   // só no cálculo, o atributo continua igual
     }
+
+    @Override
+    public String getTipo() {
+        return "Ofensivo";
+    }
 }

@@ -8,5 +8,10 @@ public class RoboDefensivo extends Robo {
     public int ajustarDanoRecebido(int dano) {
         return Math.max(2, dano - 3);   // reduz 3, mas nunca abaixo de 2
     }
+
+    @Override
+    public String getTipo() {
+        return "Defensivo";
+    }
     
 }
