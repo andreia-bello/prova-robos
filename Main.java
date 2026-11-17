@@ -75,28 +75,13 @@ public class Main {
                     System.out.println("Informe o nome do robô");
                     String nome = scanner.nextLine();
 
-                    if (nome.isEmpty()) {
-                        System.out.println("O nome não pode ser vazio.");
-                        break;
-                    }
-
                     //  o ataque deverá estar entre 10 e 30
                     System.out.println("Ataque (10 a 30)");
                     int ataque = scanner.nextInt();
 
-                    if (ataque < 10 || ataque > 30) {
-                        System.out.println("O ataque deve estar entre 10 e 30.");
-                        break;
-                    }
-
                     //e a defesa, entre 0 e 20
                     System.out.println("Defesa (0 a 20)");
                     int defesa = scanner.nextInt();
-
-                    if (defesa < 0 || defesa > 20) {
-                        System.out.println("A defesa deve estar entre 0 e 20.");
-                        break;
-                    }
 
                     // ===== SUBSTITUI o try antigo =====
                     try {
@@ -221,16 +206,7 @@ public class Main {
 
                         System.out.println( (i + 1) + "ª Rodada");
 
-                        int dano = roboPrimeiro.getAtaque() - roboSegundo.getDefesa();
-
-                        // dano mínimo de 5
-                        if (dano < 5) {
-                            dano = 5;
-                        }
-
-                        if ( (i + 1) % 2 == 0) {
-                            dano += 5;
-                        }
+                        int dano = roboPrimeiro.calcularDano(roboSegundo, i + 1);
 
                         roboSegundo.receberDano(dano);
 
@@ -241,11 +217,7 @@ public class Main {
                         }
 
                         // Ataque do segundo
-                        dano = roboSegundo.getAtaque() - roboPrimeiro.getDefesa();
-
-                        if (i % 2 == 0) {
-                            dano += 5;
-                        }
+                        dano = roboSegundo.calcularDano(roboPrimeiro, i + 1);
 
                         roboPrimeiro.receberDano(dano);
 
@@ -298,34 +270,15 @@ public class Main {
                         System.out.println("Informe a quantidade de energia: ");
                         int qtdEnergia = scanner.nextInt();
 
-                        // positivo e múltiplo de 10
-                        if (qtdEnergia <= 0 || qtdEnergia % 10 != 0) {
-                            throw new Exception("A quantidade deve ser um número positivo e múltiplo de 10.");
-                        }
+                        robo.recuperarEnergia(qtdEnergia);
+                        System.out.println("Energia recuperada! Energia atual: " + robo.getEnergia());
 
-                        // cada bloco de 10 custa 1 ponto
-                        int custo = qtdEnergia / 10;
-
-                        // A operação somente será aceita se o robô tiver pontos suficientes
-                        if (robo.getPontos() < custo) {
-                            throw new Exception("Pontos insuficientes. Custo: " + custo + " | Pontos: " + robo.getPontos());
-                        }
-
-                        // energia final não pode passar de 100
-                        if ((robo.getEnergia() + qtdEnergia) > 100) {
-                            throw new Exception("A energia final não pode ultrapassar 100.");
-                        }
-
-                        // continua
-
-                        
                     } catch (InputMismatchException e) {
                         System.out.println("Entrada inválida, informe um número.");
-                        scanner.nextLine(); 
+                        scanner.nextLine();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-
                     break;
                 }
                 

@@ -11,25 +11,34 @@ public abstract class Robo {
     private int combates;
 
     public static final int ENERGIA_MIN = 30;
+    public static final int ENERGIA_MAX = 100;
 
-    protected Robo(int codigo, String nome, int ataque, int defesa) throws Exception {
+    public Robo(int codigo, String nome, int ataque, int defesa) throws Exception {
+
+        if (codigo <= 0) {
+            throw new Exception("O código deve ser um número positivo.");
+        }
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new Exception("O nome deve ser preenchido.");
+        }
+        if (ataque < 10 || ataque > 30) {
+            throw new Exception("O ataque deve estar entre 10 e 30.");
+        }
+        if (defesa < 0 || defesa > 20) {
+            throw new Exception("A defesa deve estar entre 0 e 20.");
+        }
+
         this.codigo = codigo;
         this.nome = nome;
-        this.setAtaque(ataque);
+        this.ataque = ataque;
         this.defesa = defesa;
-        this.energia = 100;
+        this.energia = ENERGIA_MAX;
         this.vitorias = 0;
         this.derrotas = 0;
         this.pontos = 0;
         this.combates = 0;
     }
 
-    public void setAtaque(int ataque) throws Exception {
-        if (ataque < 10 || ataque > 30) {
-            throw new Exception("O ataque deve estar entre 10 e 30."); // mensagem corrigida
-        }
-        this.ataque = ataque;
-    }
 
 	public int getAtaque() {
         return this.ataque;
@@ -46,10 +55,6 @@ public abstract class Robo {
         } else {
             return "Em recuperação";
         }
-    }
-
-    public void adicionarCombate() {
-        this.combates++;
     }
 
     public void consultarRobos() {
@@ -72,15 +77,23 @@ public abstract class Robo {
         }
     }
 
-    public void recuperarEnergia(int quantidade) {
-        energia = energia + quantidade;
-        if (energia > 100) {
-            energia = 100;
+    public void recuperarEnergia(int quantidade) throws Exception {
+        if (quantidade <= 0 || quantidade % 10 != 0) {
+            throw new Exception("A quantidade deve ser um número positivo e múltiplo de 10.");
         }
-    }
 
-    public void gastarPontos(int quantidade) {
-        pontos -= quantidade;
+        int custo = quantidade / 10;
+
+        if (this.pontos < custo) {
+            throw new Exception("Pontos insuficientes. Custo: " + custo + " | Pontos: " + this.pontos);
+        }
+        if (this.energia + quantidade > ENERGIA_MAX) {
+            throw new Exception("A energia final não pode ultrapassar " + ENERGIA_MAX + ".");
+        }
+
+        // só chega aqui se TODAS as condições passaram
+        this.pontos -= custo;
+        this.energia += quantidade;
     }
 
     public void registrarVitoria() {
@@ -108,7 +121,30 @@ public abstract class Robo {
         }
     }
 
-    // public 
+    // Ataque usado no cálculo do golpe, não altera o atributo ataque)
+    public int getAtaqueEfetivo() {
+        return this.ataque;
+    }
+
+    // Ajuste final no dano que ESTE robô vai receber
+    public int ajustarDanoRecebido(int dano) {
+        return dano;
+    }
+
+    // Dano que ESTE robô (agressor) causa no alvo na rodada (1 a 5)
+    public int calcularDano(Robo alvo, int rodada) {
+        int dano = this.getAtaqueEfetivo() - alvo.getDefesa();  // 1) ataque c/ modificador - defesa
+
+        if (dano < 5) {                                         // 2) dano mínimo original
+            dano = 5;
+        }
+
+        if (rodada % 2 == 0) {                                  // 3) bônus das rodadas pares
+            dano += 5;
+        }
+
+        return alvo.ajustarDanoRecebido(dano);                  // 4) redução do defensivo
+    }
 
     // GETS
     public int getPontos() { 
